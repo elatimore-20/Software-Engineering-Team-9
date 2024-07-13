@@ -67,7 +67,14 @@ class TaskMonitorApp:
         lbl_title = tk.Label(self.current_frame, text=title, font=("Helvetica", 16))
         lbl_title.pack(pady=10)
 
-        if not display_only:
+        if display_only:
+            self.listbox_tasks = tk.Listbox(self.current_frame, width=70)
+            self.listbox_tasks.pack(pady=10)
+
+            for task in self.tasks:
+                task_info = f"{task.description} - {task.date_time.strftime('%Y-%m-%d %H:%M')} - {'Completed' if task.completed else 'Pending'}"
+                self.listbox_tasks.insert(tk.END, task_info)
+        else:
             lbl_task = tk.Label(self.current_frame, text="Task:")
             lbl_task.pack(pady=5)
             self.entry_task = tk.Entry(self.current_frame, width=50)
@@ -78,19 +85,20 @@ class TaskMonitorApp:
             self.entry_date = tk.Entry(self.current_frame, width=20)
             self.entry_date.pack(pady=5)
 
-        if list_mode:
-            self.listbox_tasks = tk.Listbox(self.current_frame, width=70)
-            self.listbox_tasks.pack(pady=10)
+            if list_mode:
+                self.listbox_tasks = tk.Listbox(self.current_frame, width=70)
+                self.listbox_tasks.pack(pady=10)
 
-            for task in self.tasks:
-                self.listbox_tasks.insert(tk.END, task.description)
+                for task in self.tasks:
+                    self.listbox_tasks.insert(tk.END, task.description)
 
-        if command:
-            btn_action = tk.Button(self.current_frame, text=title, command=command)
-            btn_action.pack(pady=10)
+            if command:
+                btn_action = tk.Button(self.current_frame, text=title, command=command)
+                btn_action.pack(pady=10)
 
         btn_back = tk.Button(self.current_frame, text="Back to Menu", command=self.create_main_menu)
         btn_back.pack(pady=10)
+
 
     def add_task(self):
         description = self.entry_task.get()
