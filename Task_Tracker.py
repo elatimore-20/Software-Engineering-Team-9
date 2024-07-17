@@ -1,8 +1,31 @@
+import json  # Import for saving/loading tasks
 import tkinter as tk
 from tkinter import messagebox, simpledialog
 import datetime
 import threading
 import time
+
+class Task:
+    def __init__(self, description, date_time, priority="Normal"):
+        self.description = description
+        self.date_time = date_time
+        self.completed = False
+        self.priority = priority
+
+    def to_dict(self):
+        return {
+            "description": self.description,
+            "date_time": self.date_time.strftime("%Y-%m-%d %H:%M"),
+            "completed": self.completed,
+            "priority": self.priority
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        date_time = datetime.datetime.strptime(data["date_time"], "%Y-%m-%d %H:%M")
+        task = cls(data["description"], date_time, data["priority"])
+        task.completed = data["completed"]
+        return task
 
 class Task:
     def __init__(self, description, date_time):
@@ -48,8 +71,8 @@ class TaskMonitorApp:
     def show_add_task_screen(self):
         self.create_input_screen("Add Task", self.add_task)
 
-    def show_delete_task_screen(self):
-        self.create_input_screen("Delete Task", self.delete_task, list_mode=True)
+        def show_edit_task_screen(self):
+    self.create_input_screen("Edit Task", self.edit_task, list_mode=True)  
 
     def show_check_tasks_screen(self):
         self.create_input_screen("Tasks", None, display_only=True)
